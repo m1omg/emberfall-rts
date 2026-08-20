@@ -1,5 +1,7 @@
 # Emberfall
 
+**▶ [Play it in your browser](https://m1omg.github.io/emberfall-rts/)**
+
 A 2D real-time strategy game for desktop and mobile browsers. The **Kingdom of
 Aldermarch** holds the border against the **Ember Legion**.
 
@@ -74,6 +76,10 @@ drift apart. The game ships complete with no image files at all.
 **Generated art is an optional override layer.** At boot the game fetches
 `assets/manifest.json`; any PNG listed there replaces the matching baked sprite.
 A missing manifest is a silent no-op, so this step is never required.
+
+Both sets live in memory at once, so you can **flip between them live**: press
+**V** in game, use the 🎨 button, or pick *Painted* / *Vector* on the menu. The
+control only appears when generated art is actually present.
 
 ```bash
 node tools/gen-assets.mjs --list        # 23 assets and their status
