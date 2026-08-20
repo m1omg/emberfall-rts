@@ -242,7 +242,7 @@ export class Renderer {
       const fp = e.size * TILE;
       this.drawShadow(ctx, e.x, e.y + 8, fp * 0.5, fp * 0.2, 0.4);
       if (sp.override) {
-        const f = fitOverride(sp.override, e.x, e.y + fp * 0.34, fp * 1.62);
+        const f = fitOverride(sp.override, e.x, e.y + fp * 0.34, fp * 1.62, fp * 2.0);
         ctx.drawImage(sp.override, f.x, f.y, f.w, f.h);
       } else {
         ctx.drawImage(sp.canvas, e.x - sp.ax, e.y - sp.ay + 6);
@@ -260,7 +260,7 @@ export class Renderer {
     ctx.translate(e.x, e.y + 4);
     ctx.scale(shrink, shrink);
     if (sp.override) {
-      const f = fitOverride(sp.override, 0, 0, 52);
+      const f = fitOverride(sp.override, 0, 0, 52, 76);
       ctx.drawImage(sp.override, f.x, f.y, f.w, f.h);
     } else {
       ctx.drawImage(sp.canvas, -sp.ax, -sp.ay);
@@ -277,7 +277,9 @@ export class Renderer {
     ctx.save();
     if (e.hitFlash > 0) { ctx.filter = 'brightness(1.7) saturate(0.6)'; }
     if (e.complete && sp.override) {
-      const f = fitOverride(sp.override, e.x, e.y + fp * 0.42, fp * 1.62);
+      // Cap the height at 2.3x the footprint so tall towers stay readable and
+      // do not hide what is behind them.
+      const f = fitOverride(sp.override, e.x, e.y + fp * 0.42, fp * 1.62, fp * 2.3);
       ctx.drawImage(sp.override, f.x, f.y, f.w, f.h);
     } else {
       const img = e.complete ? sp.done : sp.stages[clamp(Math.floor(e.progress * 4), 0, 3)];

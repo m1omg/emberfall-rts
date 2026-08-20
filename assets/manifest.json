@@ -1,0 +1,75 @@
+{
+  "generated": "2026-08-20T01:26:23.221Z",
+  "model": "gpt-image-2",
+  "assets": {
+    "building.townhall": {
+      "file": "building-townhall.png"
+    },
+    "building.farm": {
+      "file": "building-farm.png"
+    },
+    "building.barracks": {
+      "file": "building-barracks.png"
+    },
+    "building.lumbermill": {
+      "file": "building-lumbermill.png"
+    },
+    "building.blacksmith": {
+      "file": "building-blacksmith.png"
+    },
+    "building.chapel": {
+      "file": "building-chapel.png"
+    },
+    "building.workshop": {
+      "file": "building-workshop.png"
+    },
+    "building.tower": {
+      "file": "building-tower.png"
+    },
+    "building.nethergate": {
+      "file": "building-nethergate.png"
+    },
+    "building.soulwell": {
+      "file": "building-soulwell.png"
+    },
+    "building.bloodpit": {
+      "file": "building-bloodpit.png"
+    },
+    "building.forge": {
+      "file": "building-forge.png"
+    },
+    "building.hellmouth": {
+      "file": "building-hellmouth.png"
+    },
+    "building.altar": {
+      "file": "building-altar.png"
+    },
+    "building.spire": {
+      "file": "building-spire.png"
+    },
+    "prop.goldmine": {
+      "file": "prop-goldmine.png"
+    },
+    "prop.goldmine.spent": {
+      "file": "prop-goldmine-spent.png"
+    },
+    "prop.tree.0": {
+      "file": "prop-tree-0.png"
+    },
+    "prop.tree.1": {
+      "file": "prop-tree-1.png"
+    },
+    "prop.tree.2": {
+      "file": "prop-tree-2.png"
+    },
+    "prop.brimstone.0": {
+      "file": "prop-brimstone-0.png"
+    },
+    "prop.brimstone.1": {
+      "file": "prop-brimstone-1.png"
+    },
+    "prop.brimstone.2": {
+      "file": "prop-brimstone-2.png"
+    }
+  }
+}

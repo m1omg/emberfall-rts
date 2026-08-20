@@ -200,10 +200,21 @@ export function getProp(key) {
  * Generated art follows one convention: the subject fills the frame
  * horizontally and its base rests on the bottom edge. Given a desired ground
  * width, this returns where to blit it so it lands on the ground anchor.
+ *
+ * `maxHeight` matters for tall, narrow subjects. A guard tower comes back as a
+ * portrait image; scaling it by width alone makes it four times its footprint
+ * tall, so it looms over the town hall and covers the units behind it. When the
+ * cap bites, the sprite is scaled down as a whole and stays centred on its
+ * footprint.
  */
-export function fitOverride(img, groundX, groundY, targetWidth) {
-  const dw = targetWidth;
-  const dh = dw * (img.height / img.width);
+export function fitOverride(img, groundX, groundY, targetWidth, maxHeight = Infinity) {
+  let dw = targetWidth;
+  let dh = dw * (img.height / img.width);
+  if (dh > maxHeight) {
+    const k = maxHeight / dh;
+    dh = maxHeight;
+    dw *= k;
+  }
   return { x: groundX - dw / 2, y: groundY - dh, w: dw, h: dh };
 }
 

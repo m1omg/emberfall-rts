@@ -75,7 +75,9 @@ drift apart. The game ships complete with no image files at all.
 
 **Generated art is an optional override layer.** At boot the game fetches
 `assets/manifest.json`; any PNG listed there replaces the matching baked sprite.
-A missing manifest is a silent no-op, so this step is never required.
+A missing manifest is a silent no-op, so this step is never required. The 23
+structures and props in `assets/` were generated with GPT Image 2 through the
+Codex CLI; units stay procedural.
 
 Both sets live in memory at once, so you can **flip between them live**: press
 **V** in game, use the 🎨 button, or pick *Painted* / *Vector* on the menu. The
