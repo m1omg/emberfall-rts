@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0b0d14">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Emberfall — Aldermarch vs the Ember Legion</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>⚔️</text></svg>">
+</head>
+<body>
+<div id="app">
+  <canvas id="game"></canvas>
+
+  <!-- ======================= LOADING ======================= -->
+  <div id="loading" class="screen">
+    <div class="loader">
+      <div class="brand"><span class="brand-ember">Ember</span><span class="brand-fall">fall</span></div>
+      <div class="loadbar"><i id="loadfill"></i></div>
+      <div class="loadtext" id="loadtext">Forging the realm…</div>
+    </div>
+  </div>
+
+  <!-- ======================= MENU ======================= -->
+  <div id="menu" class="screen hidden">
+    <div class="menu-bg"></div>
+    <div class="menu-inner">
+      <header class="menu-head">
+        <div class="brand big"><span class="brand-ember">Ember</span><span class="brand-fall">fall</span></div>
+        <p class="tagline">The Kingdom of Aldermarch stands against the Ember Legion.</p>
+      </header>
+
+      <section class="pick">
+        <h2>Choose your banner</h2>
+        <div class="faction-cards">
+          <button class="fcard" data-faction="human" aria-pressed="true">
+            <canvas class="fcrest" width="160" height="160" data-crest="human"></canvas>
+            <div class="fname">Kingdom of Aldermarch</div>
+            <div class="fdesc">Disciplined ranks, arrow-lines and battle-clerics. Repairs, towers and healing win the long war.</div>
+            <ul class="ftraits">
+              <li><b>Gold + Lumber</b> economy with haul-back workers</li>
+              <li><b>Repair &amp; heal</b> — nothing is ever truly lost</li>
+              <li><b>Guard Towers</b> hold ground you cannot</li>
+            </ul>
+          </button>
+          <button class="fcard" data-faction="demon">
+            <canvas class="fcrest" width="160" height="160" data-crest="demon"></canvas>
+            <div class="fname">The Ember Legion</div>
+            <div class="fdesc">A tide of horns and cinders. Spreads corruption, regenerates on it, and never stops coming.</div>
+            <ul class="ftraits">
+              <li><b>Gold + Brimstone</b>, hauled by teleporting imps</li>
+              <li><b>Corruption</b> spreads and regenerates your host</li>
+              <li><b>Summoned</b> buildings — imps are never tied down</li>
+            </ul>
+          </button>
+        </div>
+      </section>
+
+      <section class="opts">
+        <div class="opt">
+          <label>Opponent</label>
+          <div class="seg" id="opt-diff">
+            <button data-v="easy">Squire</button>
+            <button data-v="normal" class="on">Captain</button>
+            <button data-v="hard">Warlord</button>
+          </div>
+        </div>
+        <div class="opt">
+          <label>Map</label>
+          <div class="seg" id="opt-map">
+            <button data-v="small">Duel · small</button>
+            <button data-v="medium" class="on">Borderlands</button>
+            <button data-v="large">Wildlands · large</button>
+          </div>
+        </div>
+        <div class="opt" id="opt-art-wrap" hidden>
+          <label>Artwork</label>
+          <div class="seg" id="opt-art">
+            <button data-v="generated" class="on">Painted</button>
+            <button data-v="procedural">Vector</button>
+          </div>
+        </div>
+        <div class="opt">
+          <label>Starting resources</label>
+          <div class="seg" id="opt-start">
+            <button data-v="lean">Lean</button>
+            <button data-v="normal" class="on">Standard</button>
+            <button data-v="rich">Rich</button>
+          </div>
+        </div>
+      </section>
+
+      <div class="menu-actions">
+        <button id="btn-play" class="primary">Begin the Campaign</button>
+        <button id="btn-help" class="ghost">How to play</button>
+      </div>
+      <footer class="menu-foot">Drag to select · Right-click (or tap) to command · Two fingers to pan &amp; pinch to zoom</footer>
+    </div>
+  </div>
+
+  <!-- ======================= HELP ======================= -->
+  <div id="help" class="screen hidden">
+    <div class="panel help-panel">
+      <h2>How to play</h2>
+      <div class="help-cols">
+        <div>
+          <h3>Desktop</h3>
+          <ul>
+            <li><b>Left drag</b> — box-select units</li>
+            <li><b>Right click</b> — move, attack, gather, build</li>
+            <li><b>WASD / edge / middle-drag</b> — pan</li>
+            <li><b>Wheel</b> — zoom · <b>Space</b> — jump to base</li>
+            <li><b>Ctrl+1…9</b> set group · <b>1…9</b> recall</li>
+            <li><b>A</b> attack-move · <b>S</b> stop · <b>H</b> hold</li>
+            <li><b>Tab</b> cycle idle worker · <b>Esc</b> cancel</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Touch</h3>
+          <ul>
+            <li><b>One-finger drag</b> — box-select (toggle the ✋ button to pan instead)</li>
+            <li><b>Two-finger drag</b> — pan the map, <b>pinch</b> — zoom</li>
+            <li><b>Tap</b> — select; with units selected, tap ground or a foe to command</li>
+            <li><b>Drag on the minimap</b> — fly the camera anywhere</li>
+            <li>Long-press a command button for its details</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Winning</h3>
+          <ul>
+            <li>Gather <b>gold</b> from mines and <b>lumber</b> (or <b>brimstone</b>) from the wilds.</li>
+            <li>Raise supply — <b>Farms</b> for the Kingdom, <b>Soul Wells</b> for the Legion.</li>
+            <li>Destroy every enemy structure and worker to win.</li>
+          </ul>
+        </div>
+      </div>
+      <button id="btn-help-close" class="primary">Back</button>
+    </div>
+  </div>
+
+  <!-- ======================= HUD ======================= -->
+  <div id="hud" class="hidden">
+    <div id="topbar">
+      <div class="res" id="res-gold"><i class="ic ic-gold"></i><span>0</span></div>
+      <div class="res" id="res-wood"><i class="ic ic-wood"></i><span>0</span></div>
+      <div class="res" id="res-supply"><i class="ic ic-supply"></i><span>0/0</span></div>
+      <div class="spacer"></div>
+      <div class="res ghosty" id="res-clock">0:00</div>
+      <button id="btn-menu" class="iconbtn" title="Menu (Esc)">☰</button>
+    </div>
+
+    <div id="alerts"></div>
+
+    <div id="touchtools">
+      <button id="tt-mode" class="tbtn" title="Drag mode">⬚</button>
+      <button id="tt-idle" class="tbtn" title="Idle worker">⛏</button>
+      <button id="tt-base" class="tbtn" title="Jump to base">⌂</button>
+      <button id="tt-art" class="tbtn on" title="Artwork: painted (V)" hidden>🎨</button>
+    </div>
+
+    <div id="bottombar">
+      <div class="bb-minimap">
+        <canvas id="minimap" width="256" height="256"></canvas>
+        <div class="mm-frame"></div>
+      </div>
+      <div class="bb-info" id="selinfo"></div>
+      <div class="bb-cmds" id="commandcard"></div>
+    </div>
+
+    <div id="tooltip" class="hidden"></div>
+  </div>
+
+  <!-- ======================= RESULT ======================= -->
+  <div id="result" class="screen hidden">
+    <div class="panel result-panel">
+      <div class="result-title" id="result-title">Victory</div>
+      <div class="result-sub" id="result-sub"></div>
+      <div class="result-stats" id="result-stats"></div>
+      <div class="menu-actions">
+        <button id="btn-again" class="primary">Fight again</button>
+        <button id="btn-tomenu" class="ghost">Main menu</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="pause" class="screen hidden">
+    <div class="panel">
+      <h2>Paused</h2>
+      <div class="menu-actions">
+        <button id="btn-resume" class="primary">Resume</button>
+        <button id="btn-restart" class="ghost">Restart</button>
+        <button id="btn-quit" class="ghost">Abandon</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="module" src="src/main.js"></script>
+</body>
+</html>
